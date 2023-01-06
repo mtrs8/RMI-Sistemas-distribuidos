@@ -25,8 +25,8 @@ public class RmiServer extends java.rmi.server.UnicastRemoteObject implements Re
     }
 
     private int sendCommand(String comandoSql) {
-        Connection con = conecta.Conexao("jdbc:sqlserver://localhost:1433", "joao.santos",
-                "joao3257",
+        Connection con = conecta.Conexao("jdbc:sqlserver://localhost:1433", "sa",
+                "123456789",
                 database);
 
         Statement stmt;

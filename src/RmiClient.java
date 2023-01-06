@@ -39,6 +39,8 @@ public class RmiClient {
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } finally {
+        	scanner.close();        	
         }
     }
 
