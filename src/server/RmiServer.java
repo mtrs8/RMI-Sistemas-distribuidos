@@ -2,7 +2,6 @@ package server;
 
 import java.rmi.*;
 import java.rmi.registry.*;
-import java.rmi.server.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,11 +11,13 @@ import java.util.*;
 import interfaces.ReceiveMessageInterface;
 
 public class RmiServer extends java.rmi.server.UnicastRemoteObject implements ReceiveMessageInterface {
-    private int id;
+    
+	private static final long serialVersionUID = 1L;
+	private int id;
     private int thisPort;
     private String thisAddress;
     Registry registry;
-    private String database;
+    private String database = "worker1";
     Conexao conecta = new Conexao();
     ArrayList<RmiServer> servers = new ArrayList<RmiServer>();
 
@@ -48,12 +49,12 @@ public class RmiServer extends java.rmi.server.UnicastRemoteObject implements Re
     }
 
     private int sendCommand(String comandoSql) {
-        try (Connection con = conecta.Conexao("jdbc:sqlserver://localhost:1433", "joao.santos", "joao3257", database)) {
+        try (Connection con = conecta.Conexao("jdbc:sqlserver://localhost:1433", "sa", "123456789", database)) {
             Statement stmt;
             try {
                 // con.setAutoCommit(false);
                 stmt = con.createStatement();
-                stmt.executeUpdate(comandoSql);
+                stmt.execute(comandoSql);
                 con.close();
                 return 200;
             } catch (SQLException e) {
@@ -74,7 +75,7 @@ public class RmiServer extends java.rmi.server.UnicastRemoteObject implements Re
             this.id = id;
             this.database = dataBase;
         } catch (Exception e) {
-            throw new RemoteException("can't get inet address.");
+            throw new RemoteException("Não foi possível encontrar o endereço inet.");
         }
         this.thisPort = porta;
         System.out.println("Conectado address=" + this.thisAddress + "- port=" + this.thisPort);
